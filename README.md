@@ -1,16 +1,11 @@
-# TacTok
-The TacTok automated Coq proof script synthesis tool
+# Passport
+The Passport automated Coq proof script synthesis tool
 
-The TacTok technique and its evaluation are described in [TacTok: Semantics-Aware Proof Synthesis](https://people.cs.umass.edu/~brun/pubs/pubs/First20oopsla.pdf) by Emily First, Yuriy Brun, and Arjun Guha, in Proceedings of the ACM on Programming Languages (PACMPL) Object-Oriented Programming, Systems, Languages, and Applications (OOPSLA) issue, vol. 4, November 2020, pp. 149:1-149:26, doi: [10.1145/3428299](http://dx.doi.org/10.1145/3428299).
-
-We have made available a replication package for the results in the paper. It is a VirtualBox VM: [here](http://doi.org/10.5281/zenodo.4088897).
-This includes the result files, scripts for processing the results, pre-trained models, directions and code for running the pre-trained models, and training examples used in the paper. The VM does not support training models.
-
-The following are the directions for installation and use of TacTok.
+The following are the directions for installation and use of Passport.
 
 ## 1. Installation
 
-TacTok operates within the [CoqGym](https://github.com/princeton-vl/CoqGym) learning environment and so modifies their code. 
+Passport operates within the [CoqGym](https://github.com/princeton-vl/CoqGym) learning environment and so modifies their code. 
 The following are the dependencies and directions to install CoqGym:
 
 ### Dependencies
@@ -51,16 +46,16 @@ This generates a `*.json` file in `./data/` corresponding to each `*.meta` file.
 
 ### Training Examples (proof steps)
 
-1. Proofs steps used in the paper are found in `processed.tar.gz`, which can be downloaded from the replication package link provided above. This should be copied into `TacTok/`
+1. Proofs steps used in the paper are found in `processed.tar.gz`, which can be downloaded from the replication package link provided above. This should be copied into `Passport/`
 2. To extract new proofs, run `python extract_proof_steps.py`.
 3. To generate new proof steps that have `prev_tokens` field, run `python process_proof_steps.py`. This will generate `processed/proof_steps`.
 
-## 4. Training TacTok 
+## 4. Training Passport
 
 To train, for example, the Tok model on all the proof steps, run 
 `python main.py --no_validation --exp_id tok` 
 
-Model checkpoints will be saved in `TacTok/runs/tok/checkpoints/`. See `options.py` for command line options.
+Model checkpoints will be saved in `Passport/runs/tok/checkpoints/`. See `options.py` for command line options.
 
 ## 5. Evaluation
 
