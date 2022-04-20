@@ -1,4 +1,4 @@
-name: coq_gym
+name: passport
 channels:
   - defaults
 dependencies:
