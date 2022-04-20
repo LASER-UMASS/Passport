@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 #SBATCH -p defq
-TT_DIR=$HOME/work/TacTok
+TT_DIR=$HOME/work/Passport
 [[ "$#" -lt 2 ]] && echo "Wrong number of parameters! This script takes at least two arguments, a weights id and a project index" && exit 1
 EVAL_ID=$1
 PROJ_IDX=$2

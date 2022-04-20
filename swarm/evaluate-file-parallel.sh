@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # determine physical directory of this script
-TT_DIR=$HOME/work/TacTok
+TT_DIR=$HOME/work/Passport
 
 [[ "$#" -lt 3 ]] && echo "Wrong number of parameters! This script takes at least three arguments, an evaluation id, a project id, and a file id" && exit 1
 EVAL_ID=$1

@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 
-TT_DIR=$HOME/work/TacTok
-REMOTE_TT_DIR=gypsum.cs.umass.edu:TacTok
+TT_DIR=$HOME/work/Passport
+REMOTE_TT_DIR=gypsum.cs.umass.edu:Passport
 
 FLAGS_DEFAULT="--no-locals-file --bpe-merges=4096"
 
 run-experiment () (
     EVAL_ID=$1
     shift 1
-    rsync -avzz ${REMOTE_TT_DIR}/TacTok/runs/${EVAL_ID} \
-          ${TT_DIR}/TacTok/runs/
+    rsync -avzz ${REMOTE_TT_DIR}/Passport/runs/${EVAL_ID} \
+          ${TT_DIR}/Passport/runs/
     ${TT_DIR}/swarm/evaluate-test.sh ${EVAL_ID} ${FLAGS_DEFAULT} "$@"
 )
 

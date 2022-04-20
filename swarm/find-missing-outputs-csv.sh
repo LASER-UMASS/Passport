@@ -5,7 +5,7 @@ shopt -s nullglob
 
 [[ "$#" -ne 1 ]] && echo "Wrong number of parameters! This script takes one argument, a directory to search" 1>&2 && exit 1
 
-TT_DIR=$HOME/work/TacTok
+TT_DIR=$HOME/work/Passport
 
 OUTPUT_DIR=$1
 if [[ ! -d ${OUTPUT_DIR} ]]; then

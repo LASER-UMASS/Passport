@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-TT_DIR=$HOME/work/TacTok
+TT_DIR=$HOME/work/Passport
 
 PS=$TT_DIR/projs_split.json
 NUM_PROJS=$(( $(jq ".projs_train | length" $PS) + $(jq ".projs_valid | length" $PS) ))
 DEST=./proof_steps/
-REALDEST=TacTok/${DEST}
+REALDEST=Passport/${DEST}
 mkdir -p output/extract/
 
 if [ -d "$REALDEST" ]; then

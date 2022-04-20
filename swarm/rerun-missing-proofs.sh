@@ -22,7 +22,7 @@ shift $((OPTIND-1))
 
 [[ "$#" -lt 1 ]] && usage
 
-TT_DIR=$HOME/work/TacTok
+TT_DIR=$HOME/work/Passport
 
 EVAL_ID=$1
 shift 1
@@ -31,7 +31,7 @@ mkdir -p output/evaluate/${EVAL_ID}
 
 NUM_PROOFS_DISPATCHED=0
 
-$TT_DIR/swarm/find-missing-outputs-csv.sh ${TT_DIR}/TacTok/evaluation/${EVAL_ID} |
+$TT_DIR/swarm/find-missing-outputs-csv.sh ${TT_DIR}/Passport/evaluation/${EVAL_ID} |
 while IFS=, read -r proj_idx proj_name file_idx file_name proof_idx proof_name; do
   if [[ $proof_idx == "" ]]; then 
       PROOFS=$(python $TT_DIR/print_proof_names.py --proj=${proj_name} --file_idx=${file_idx})

@@ -10,7 +10,7 @@ import time
 from os import environ
 from typing import List
 
-tt_dir = os.path.expandvars("$HOME/work/TacTok")
+tt_dir = os.path.expandvars("$HOME/work/Passport")
 
 def main():
     argparser = argparse.ArgumentParser()
@@ -54,7 +54,7 @@ class FileLock:
         fcntl.flock(self.file_handle, fcntl.LOCK_UN)
 
 def run_worker(args: argparse.Namespace, rest_args: List[str]) -> None:
-    dest_dir = os.path.join(tt_dir, "TacTok/evaluation/", args.eval_id)
+    dest_dir = os.path.join(tt_dir, "Passport/evaluation/", args.eval_id)
     with open(os.path.join(dest_dir, "workers_scheduled.txt"), 'a') as f, FileLock(f):
         print(args.workerid, file=f)
     with open(os.path.join(dest_dir, args.jobsfile), 'r') as f, FileLock(f):

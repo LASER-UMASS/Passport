@@ -2,13 +2,13 @@
 
 set -e
 
-TT_DIR=$HOME/work/TacTok
+TT_DIR=$HOME/work/Passport
 
 [[ "$#" -lt 1 ]] && echo "Wrong number of parameters! This script takes at least one argument, a weights id" && exit 1
 
 EVAL_ID=$1
 shift 1
-DEST="$TT_DIR/TacTok/evaluation/$EVAL_ID"
+DEST="$TT_DIR/Passport/evaluation/$EVAL_ID"
 
 if [ -d $DEST ]; then
     read -r -p "Destination directory $DEST exists. Remove it? [y/N] " input
@@ -23,7 +23,7 @@ if [ -d $DEST ]; then
             set -x
             ${TT_DIR}/swarm/show-tasks-left.sh -B 661 -s 10 ${EVAL_ID}
             set +x
-            if ! ls $TT_DIR/TacTok/evaluation/${EVAL_ID}/results*.json &> /dev/null; then
+            if ! ls $TT_DIR/Passport/evaluation/${EVAL_ID}/results*.json &> /dev/null; then
                 echo "Evaluation failed for all files, exiting..."
                 exit 1
             fi
@@ -49,7 +49,7 @@ done
 set -x
 ${TT_DIR}/swarm/show-tasks-left.sh -B 661 -s 20 ${EVAL_ID}
 set +x
-if ! ls $TT_DIR/TacTok/evaluation/${EVAL_ID}/results*.json &> /dev/null; then
+if ! ls $TT_DIR/Passport/evaluation/${EVAL_ID}/results*.json &> /dev/null; then
     echo "Evaluation failed for all files, exiting..."
     exit 1
 fi

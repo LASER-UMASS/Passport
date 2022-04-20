@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-TT_DIR=$HOME/work/TacTok
+TT_DIR=$HOME/work/Passport
 
 PS=$TT_DIR/projs_split.json
 NUM_PROJS=$(jq ".projs_test | length" $PS)

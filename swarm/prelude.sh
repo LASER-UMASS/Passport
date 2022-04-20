@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-TT_DIR=$HOME/work/TacTok
+TT_DIR=$HOME/work/Passport
 
 read-opam.sh
 opam switch "4.07.1+flambda"

@@ -1,9 +1,9 @@
-# A script to process TacTok results
+# A script to process Passport results
 
 # Call this with python process_results.py <results-dir>
 
 # Where "<results-dir>" is the directory where the results were put (usually
-# TacTok/evaluation/<exp-id>)
+# Passport/evaluation/<exp-id>)
 
 # It will print the resulting percentage, and the successful and total proof
 # counts.

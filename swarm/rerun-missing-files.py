@@ -10,7 +10,7 @@ from typing import List, Dict
 parser = argparse.ArgumentParser()
 parser.add_argument("eval_id")
 args, rest_args = parser.parse_known_args()
-tt_dir = expandvars("$HOME/work/TacTok")
+tt_dir = expandvars("$HOME/work/Passport")
 
 def submit_array(proj_idx: int, file_idxs: List[int]):
     result = subprocess.run([f"{tt_dir}/swarm/sbatch-retry.sh",
@@ -23,7 +23,7 @@ def submit_array(proj_idx: int, file_idxs: List[int]):
                              args.eval_id, proj_idx] + rest_args)
 
 result = subprocess.Popen([f"{tt_dir}/swarm/find-missing-outputs-csv.sh",
-                           f"{tt_dir}/TacTok/evaluation/{args.eval_id}"],
+                           f"{tt_dir}/Passport/evaluation/{args.eval_id}"],
                           stdout=subprocess.PIPE, text=True)
 
 csvreader = csv.reader(result.stdout)

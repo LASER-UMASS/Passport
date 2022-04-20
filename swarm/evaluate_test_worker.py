@@ -12,7 +12,7 @@ import sys
 from tqdm import tqdm
 from typing import List
 
-tt_dir = os.path.expandvars("$HOME/work/TacTok")
+tt_dir = os.path.expandvars("$HOME/work/Passport")
 
 def is_yes(response: str) -> bool:
     return response in ["yes", "Yes", "YES", "y", "Y"]
@@ -30,7 +30,7 @@ def main() -> None:
     argparser.add_argument("--projs-split", default="projs_split.json")
     args, rest_args = argparser.parse_known_args()
 
-    dest_dir = os.path.join(tt_dir, "TacTok/evaluation", args.eval_id)
+    dest_dir = os.path.join(tt_dir, "Passport/evaluation", args.eval_id)
     if os.path.exists(dest_dir):
         response = input(f"Destination directory {dest_dir} exists. Remove it? [y/N] ")
         if is_yes(response):
@@ -109,7 +109,7 @@ def setup_jobs(args: argparse.Namespace, dest_dir: str) -> None:
 
 def dispatch_workers(args: argparse.Namespace, rest_args: List[str]) -> None:
     os.makedirs(f"{tt_dir}/output/workers/", exist_ok=True)
-    dest_dir = os.path.join(tt_dir, "TacTok/evaluation", args.eval_id)
+    dest_dir = os.path.join(tt_dir, "Passport/evaluation", args.eval_id)
     with open(os.path.join(dest_dir, "num_workers_dispatched.txt"), 'w') as f:
         print(args.num_workers, file=f)
     with open(os.path.join(dest_dir, "workers_scheduled.txt"), 'w') as f:

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-TT_DIR=$HOME/work/TacTok/
+TT_DIR=$HOME/work/Passport/
 BACKOFF_AMOUNT=0.001
 SFLAGS="-u $USER -h"
 while getopts ":J:" opt; do

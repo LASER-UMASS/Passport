@@ -12,13 +12,13 @@ Makefile.conf
 .merlin
 .coqdeps.d
 coq/*
-TacTok/coqhammer/*
-TacTok/processed/
-TacTok/runs/
+Passport/coqhammer/*
+Passport/processed/
+Passport/runs/
 output/
 data/
 proof_steps/
-TacTok/evaluation/*
+Passport/evaluation/*
 *.tar.gz
 coq_projects/
 sexp_cache/

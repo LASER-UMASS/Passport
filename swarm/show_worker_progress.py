@@ -4,7 +4,7 @@ from evaluate_test_worker import show_progress
 import argparse
 import os.path
 
-tt_dir = os.path.expandvars("$HOME/work/TacTok")
+tt_dir = os.path.expandvars("$HOME/work/Passport")
 
 def main() -> None:
     argparser = argparse.ArgumentParser()
@@ -16,7 +16,7 @@ def main() -> None:
     argparser.add_argument("--crashedfile", default="crashed.txt")
     argparser.add_argument("--projs-split", default="projs_split.json")
     args, rest_args = argparser.parse_known_args()
-    dest_dir = os.path.join(tt_dir, "TacTok/evaluation", args.eval_id)
+    dest_dir = os.path.join(tt_dir, "Passport/evaluation", args.eval_id)
 
     show_progress(args, dest_dir)
 

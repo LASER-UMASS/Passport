@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-TT_DIR=$HOME/work/TacTok/
+TT_DIR=$HOME/work/Passport/
 
 set -ex
 
@@ -12,5 +12,5 @@ PROJ=$1
 shift 1
 FILE_IDX=$SLURM_ARRAY_TASK_ID
 FILE=$(find ${TT_DIR}/data/${PROJ} -name "*.json" | awk "NR==($FILE_IDX+1)")
-cd TacTok
+cd Passport
 python extract_proof_steps.py --file "$FILE" $@

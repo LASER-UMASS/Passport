@@ -1,9 +1,9 @@
-# A script to combine TacTok results
+# A script to combine Passport results
 
 # Call this with python combine_results.py --results_dir_list <dir strings separated by spaces>
 
 # Where --results_dir_list is a list of the directories where the results were put (usually
-# TacTok/evaluation/<exp-id>)
+# Passport/evaluation/<exp-id>)
 
 # It will print the resulting percentage, and the successful and total proof
 # counts.

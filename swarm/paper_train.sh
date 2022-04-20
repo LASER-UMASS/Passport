@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-TT_DIR=$HOME/TacTok
+TT_DIR=$HOME/Passport
 
 FLAGS_DEFAULT="--num_epochs=3 --no-locals-file --max-ident-chunks=4 --bpe-merges=4096"
 

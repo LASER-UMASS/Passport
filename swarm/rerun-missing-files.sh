@@ -3,14 +3,14 @@ set -e
 
 [[ "$#" -lt 1 ]] && echo "Wrong number of parameters! This script takes at least one argument, an evaluation id" && exit 1
 
-TT_DIR=$HOME/work/TacTok
+TT_DIR=$HOME/work/Passport
 
 EVAL_ID=$1
 shift 1
 
 mkdir -p output/evaluate/${EVAL_ID}
 
-$TT_DIR/swarm/find-missing-outputs-csv.sh ${TT_DIR}/TacTok/evaluation/${EVAL_ID} |
+$TT_DIR/swarm/find-missing-outputs-csv.sh ${TT_DIR}/Passport/evaluation/${EVAL_ID} |
 while IFS=, read -r proj_idx proj_name file_idx file_name proof_idx proof_name; do
   if [[ $proof_idx == "" ]]; then
       sbatch -p defq -J ${EVAL_ID}-evaluate-file \
