@@ -60,10 +60,3 @@ Model checkpoints will be saved in `Passport/runs/tok/checkpoints/`. See `option
 
 Now, you can evaluate a model you trained on the test set. For example, the Tok model that you trained can be run with `python evaluate.py ours tok-results --path /path/to/tok_model/*.pth`.
 If you used additional options in training, specify those same options for evaluating.
- 
- WeigthedGreedy and WeightedRandom don't require any training. To evaluate these two methods:
-1. Run WeightedGreedy
-    `python evaluate.py greedy greedy-results`
-2. Run WeightedRandom 
-    `python evaluate.py weighed random-results`
-These commands run the models for the entire specified test set. You can specify file names, proof names, project/file indices, etc. 
