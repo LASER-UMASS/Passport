@@ -1,5 +1,6 @@
 # Passport
 ![Passport logo](logo.png)
+
 The Passport automated Coq proof script synthesis tool
 
 The following are the directions for installation and use of Passport.
