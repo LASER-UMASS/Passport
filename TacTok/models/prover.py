@@ -14,11 +14,11 @@ import pickle
 
 class Prover(nn.Module):
 
-    def __init__(self, opts):
+    def __init__(self, opts, defs_vocab, locals_vocab, constructors_vocab, common_paths):
         super().__init__()
         self.opts = opts
         self.tactic_decoder = TacticDecoder(CFG(opts.tac_grammar, 'tactic_expr'), opts)
-        self.term_encoder = TermEncoder(opts)
+        self.term_encoder = TermEncoder(opts, defs_vocab, locals_vocab, constructors_vocab, common_paths)
         self.tactic_embedding = Embedding(opts.num_tactics, opts.tac_embedding, padding_idx=0)
         self.tactic_LSTM = LSTM(opts.tac_embedding, opts.tac_embedding, opts.tac_layers, batch_first=True, bidirectional=True)
         self.tac_vocab = pickle.load(open(opts.tac_vocab_file, 'rb'))

@@ -45,28 +45,6 @@ if __name__ == '__main__':
 
     opts = parser.parse_args()
 
-    # The identifier vocabulary
-    vocab = []
-    if opts.include_defs:
-        vocab += list(pickle.load(open(opts.def_vocab_file, 'rb')).keys())
-    vocab += ['<unk-ident>']
-
-    # The local variable vocabulary
-    if opts.include_locals:
-        vocab += list(pickle.load(open(opts.local_vocab_file, 'rb')).keys())
-        if not opts.merge_vocab:
-            vocab += ['<unk-local>']
-
-    if opts.include_paths:
-        vocab += list(pickle.load(open(opts.path_vocab_file, 'rb')).keys())
-        if not opts.merge_vocab:
-            vocab += ['<unk-path>']
-
-    if opts.include_constructor_names:
-        vocab += list(pickle.load(open(opts.constructor_vocab_file, 'rb')).keys())
-        vocab += ['<unk-constructor>']
-
-    opts.vocab = vocab   
 
     opts.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     if opts.device.type == 'cpu':
@@ -81,7 +59,9 @@ if __name__ == '__main__':
     projs_test = ["weak-up-to", "buchberger", "jordan-curve-theorem", "dblib", "disel", "zchinese", "zfc", "dep-map", "chinese", "UnifySL", "hoare-tut", "huffman", "PolTac", "angles", "coq-procrastination", "coq-library-undecidability", "tree-automata", "coquelicot", "fermat4", "demos", "coqoban", "goedel", "verdi-raft", "verdi", "zorns-lemma", "coqrel", "fundamental-arithmetics"]
 
     if 'ours' in opts.method:
-        model = Prover(opts)
+        defs_vocab, locals_vocab, constrs_vocab, paths_vocab = \
+          common_args.get_vocabs(opts)
+        model = Prover(opts, defs_vocab, locals_vocab, constrs_vocab, paths_vocab)
         log('loading model checkpoint from %s..' % opts.path)
         if opts.device.type == 'cpu':
             checkpoint = torch.load(opts.path, map_location='cpu')

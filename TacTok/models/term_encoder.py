@@ -78,13 +78,12 @@ nonterminals = [
 
 class InputOutputUpdateGate(nn.Module):
 
-    def __init__(self, hidden_dim, vocab, opts, nonlinear):
+    def __init__(self, hidden_dim, vocab_size: int, opts, nonlinear):
         super().__init__()
         self.nonlinear = nonlinear
-        self.vocab = vocab
         k = 1. / math.sqrt(hidden_dim)
         self.W = nn.Parameter(torch.Tensor(hidden_dim,
-                                           len(vocab) + opts.ident_vec_size
+                                           vocab_size + opts.ident_vec_size
                                            + hidden_dim))
         nn.init.uniform_(self.W, -k, k)
         self.b = nn.Parameter(torch.Tensor(hidden_dim))
@@ -97,13 +96,13 @@ class InputOutputUpdateGate(nn.Module):
 
 class ForgetGates(nn.Module):
 
-    def __init__(self, hidden_dim, vocab, opts):
+    def __init__(self, hidden_dim, vocab_size, opts):
         super().__init__()
         self.hidden_dim = hidden_dim
         self.opts = opts
         k = 1. / math.sqrt(hidden_dim)
         # the weight for the input
-        self.W_if = nn.Parameter(torch.Tensor(hidden_dim, len(vocab) + opts.ident_vec_size))
+        self.W_if = nn.Parameter(torch.Tensor(hidden_dim, vocab_size + opts.ident_vec_size))
         nn.init.uniform_(self.W_if, -k, k)
         # the weight for the hidden
         self.W_hf = nn.Parameter(torch.Tensor(hidden_dim, hidden_dim))
@@ -134,25 +133,51 @@ class ForgetGates(nn.Module):
 
 class TermEncoder(nn.Module):
 
-    def __init__(self, opts):
+    def __init__(self, opts, defs_vocab, locals_vocab, constructors_vocab, common_paths):
         super().__init__()
         self.opts = opts
         self.syn_conf = SyntaxConfig(opts.include_locals, opts.include_defs, opts.include_paths,
                                      opts.include_constructor_names, opts.merge_vocab)
-        self.vocab = opts.vocab + nonterminals
-        self.input_gate = InputOutputUpdateGate(opts.term_embedding_dim, self.vocab, opts,
+        if opts.merge_known_vocabs:
+            self.locals_vocab = []
+            self.defs_vocab = []
+            self.constructors_vocab = []
+        else:
+            self.locals_vocab = locals_vocab
+            self.defs_vocab = defs_vocab
+            self.constructors_vocab = constructors_vocab
+
+        self.common_paths = common_paths
+
+        if opts.merge_unknowns:
+            num_unks = 2
+        else:
+            num_unks = 4
+        if opts.merge_known_vocabs:
+            self.merged_vocab = list(set(locals_vocab + defs_vocab + constructors_vocab))
+            overall_vocab_size = len(self.merged_vocab) + len(common_paths) + \
+              len(nonterminals) + nun_unks
+        else:
+            self.merged_vocab = []
+            overall_vocab_size = len(locals_vocab) + len(defs_vocab) + \
+              len(constructors_vocab) + len(common_paths) + \
+              len(nonterminals) + num_unks
+        self.input_gate = InputOutputUpdateGate(opts.term_embedding_dim,
+                                                overall_vocab_size, opts,
                                                 nonlinear=torch.sigmoid)
-        self.forget_gates = ForgetGates(opts.term_embedding_dim, self.vocab, opts)
-        self.output_gate = InputOutputUpdateGate(opts.term_embedding_dim, self.vocab, opts,
+        self.forget_gates = ForgetGates(opts.term_embedding_dim, overall_vocab_size, opts)
+        self.output_gate = InputOutputUpdateGate(opts.term_embedding_dim,
+                                                 overall_vocab_size, opts,
                                                  nonlinear=torch.sigmoid)
-        self.update_cell = InputOutputUpdateGate(opts.term_embedding_dim, self.vocab, opts,
+        self.update_cell = InputOutputUpdateGate(opts.term_embedding_dim,
+                                                 overall_vocab_size, opts,
                                                  nonlinear=torch.tanh)
         # By default, load the vocabulary passed in --globals-file; this defaults to the
         # globals vocabulary but can be set to any other by command line.
         occurances = pickle.load(open(opts.globals_file, 'rb'))
 
         # Non-default vocabularies
-        if opts.merge_vocab:
+        if opts.merge_knowns:
             # If passed --merge_vocab, use the merged vocabulary instead
             occurances = pickle.load(open(opts.merged_file, 'rb'))
         elif opts.use_locals_file:
@@ -188,18 +213,36 @@ class TermEncoder(nn.Module):
 
     def get_vocab_idx(self, node, localnodes, paths, cnames):
         data = node.data
-        vocab = self.vocab
-        merge_vocab = self.opts.merge_vocab
-        if data in vocab:
-            return vocab.index(data)
-        elif (node in localnodes) and not merge_vocab:
-            return vocab.index('<unk-local>')
-        elif (node in paths) and not merge_vocab:
-            return vocab.index('<unk-path>')
-        elif (node in cnames) and not merge_vocab:
-            return vocab.index('<unk-constructor>')
+        if opts.merge_unknowns:
+            num_unks = 2 # If we merge unknowns, then there is a path unknown,
+                         # and an everthing else unknown
         else:
-            return vocab.index('<unk-ident>')
+            num_unks = 4 # Otherewise, there's a path unknown, a local unknown,
+                         # a constructor unknown, and a global unknown
+        if self.opts.merge_known_vocabs and data in self.merged_vocab:
+            return num_unks + self.merged_vocab.index(data)
+        elif node in localnodes and data in self.locals_vocab:
+            return num_unks + self.locals_vocab.index(data)
+        elif node in cnames and data in self.constructors_vocab:
+            return num_unks + len(self.locals_vocab) + self.constructors_vocab.index(data)
+        elif node in paths:
+            if data in self.common_paths:
+                return num_unks + len(self.locals_vocab) + len(self.constructors_vocab) + \
+                    self.common_paths.index(data)
+            else:
+                return 0 # This is the "unknown path" index
+        elif node not in localnodes + cnames + paths and data in self.defs_vocab.index(data):
+            return num_unks + len(self.locals_vocab) + len(self.constructors_vocab) + \
+              len(self.common_paths) + self.defs_vocab.index(data)
+        elif self.opts.merge_unknowns:
+            return 1 # This is the "unknown ident" index, when unknowns are merged (not paths)
+        else:
+            if node in localnodes:
+                return 1 # This is the "unknown local" index
+            elif node in cnames:
+                return 2 # This is the "unknown constructor" index
+            else:
+                return 3 # This is the "unknown global definition" index
 
     def normalize_length(self, length, pad, seq):
         if len(seq) > length:

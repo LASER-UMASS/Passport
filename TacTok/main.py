@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 from torch.optim.lr_scheduler import ReduceLROnPlateau, StepLR
 from training_options import parse_args
+from common_args import get_vocabs
 from dataloader import create_dataloader
 from utils import log
 from agent import Agent
@@ -18,8 +19,12 @@ def main():
     dataloader = {'train': create_dataloader('train_valid' if opts.no_validation else 'train', opts),
                   'valid': create_dataloader('valid', opts)}
 
+    # Load the vocabs
+    defs_vocab, locals_vocab, constrs_vocab, paths_vocab = \
+      get_vocabs(opts)
+
     # create the model
-    model = Prover(opts)
+    model = Prover(opts, defs_vocabs, locals_vocab, constrs_vocab, paths_vocab)
     model.to(opts.device)
 
     # crete the optimizer

@@ -22,7 +22,8 @@ def add_common_args(parser: argparse.ArgumentParser):
     parser.add_argument('--path_vocab_file', type=str, default='./names/paths-known-200.pickle')
     parser.add_argument('--constructor_vocab_file', type=str, default='./names/constructors-known-100.pickle')
     parser.add_argument('--cutoff_len', type=int, default=30)
-    parser.add_argument('--merge_vocab', action='store_true', help='Merge all identifier vocabularies, with a single unknown')
+    parser.add_argument('--merge_known_vocabs', action='store_true', help='merge the known vocabs')
+    parser.add_argument('--merge_unknowns', action='store_true', help='merge the vocab unknowns')
 
     parser.add_argument('--tac_embedding', type=int, default=256, help='dimension of the tactic encoder embedding')
     parser.add_argument('--tac_layers', type=int, default=1, help='number of layers in the tactic LSTM')
