@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 import argparse
+import pickle
+from typing import List, Tuple
 
 def add_common_args(parser: argparse.ArgumentParser):
 
@@ -50,3 +52,26 @@ def add_common_args(parser: argparse.ArgumentParser):
     parser.add_argument('--teacher_forcing', type=float, default=1.0)
 
     parser.add_argument('--debug', action='store_true')
+
+def get_vocabs(opts: argparse.Namespace) -> \
+  Tuple[List[str], List[str], List[str], List[str]]:
+    if opts.include_defs:
+        defs_vocab = list(pickle.load(open(opts.def_vocab_file, 'rb')).keys())
+    else:
+        defs_vocab = []
+
+    if opts.include_locals:
+        locals_vocab = list(pickle.load(open(opts.local_vocab_file, 'rb')).keys())
+    else:
+        locals_vocab = []
+
+    if opts.include_constructor_names:
+        constructors_vocab = list(pickle.load(open(opts.constructor_vocab_file, 'rb')).keys())
+    else:
+        constructors_vocab = []
+
+    if opts.include_paths:
+        paths_vocab = list(pickle.load(open(opts.path_vocab_file, 'rb')).keys())
+    else:
+        paths_vocab = []
+    return defs_vocab, locals_vocab, constructors_vocab, paths_vocab
