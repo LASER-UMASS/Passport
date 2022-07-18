@@ -177,7 +177,7 @@ class TermEncoder(nn.Module):
         occurances = pickle.load(open(opts.globals_file, 'rb'))
 
         # Non-default vocabularies
-        if opts.merge_knowns:
+        if opts.merge_known_vocabs:
             # If passed --merge_vocab, use the merged vocabulary instead
             occurances = pickle.load(open(opts.merged_file, 'rb'))
         elif opts.use_locals_file:
@@ -213,7 +213,7 @@ class TermEncoder(nn.Module):
 
     def get_vocab_idx(self, node, localnodes, paths, cnames):
         data = node.data
-        if opts.merge_unknowns:
+        if self.opts.merge_unknowns:
             num_unks = 2 # If we merge unknowns, then there is a path unknown,
                          # and an everthing else unknown
         else:
