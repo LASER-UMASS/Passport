@@ -137,7 +137,7 @@ class TermEncoder(nn.Module):
         super().__init__()
         self.opts = opts
         self.syn_conf = SyntaxConfig(opts.include_locals, opts.include_defs, opts.include_paths,
-                                     opts.include_constructor_names, opts.merge_vocab)
+                                     opts.include_constructor_names)
         if opts.merge_known_vocabs:
             self.locals_vocab = []
             self.defs_vocab = []
