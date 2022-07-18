@@ -155,22 +155,22 @@ class TermEncoder(nn.Module):
             num_unks = 4
         if opts.merge_known_vocabs:
             self.merged_vocab = list(set(locals_vocab + defs_vocab + constructors_vocab))
-            overall_vocab_size = len(self.merged_vocab) + len(common_paths) + \
+            self.overall_vocab_size = len(self.merged_vocab) + len(common_paths) + \
               len(nonterminals) + nun_unks
         else:
             self.merged_vocab = []
-            overall_vocab_size = len(locals_vocab) + len(defs_vocab) + \
+            self.overall_vocab_size = len(locals_vocab) + len(defs_vocab) + \
               len(constructors_vocab) + len(common_paths) + \
               len(nonterminals) + num_unks
         self.input_gate = InputOutputUpdateGate(opts.term_embedding_dim,
-                                                overall_vocab_size, opts,
+                                                self.overall_vocab_size, opts,
                                                 nonlinear=torch.sigmoid)
-        self.forget_gates = ForgetGates(opts.term_embedding_dim, overall_vocab_size, opts)
+        self.forget_gates = ForgetGates(opts.term_embedding_dim, self.overall_vocab_size, opts)
         self.output_gate = InputOutputUpdateGate(opts.term_embedding_dim,
-                                                 overall_vocab_size, opts,
+                                                 self.overall_vocab_size, opts,
                                                  nonlinear=torch.sigmoid)
         self.update_cell = InputOutputUpdateGate(opts.term_embedding_dim,
-                                                 overall_vocab_size, opts,
+                                                 self.overall_vocab_size, opts,
                                                  nonlinear=torch.tanh)
         # By default, load the vocabulary passed in --globals-file; this defaults to the
         # globals vocabulary but can be set to any other by command line.
@@ -328,7 +328,7 @@ class TermEncoder(nn.Module):
             # sum up the hidden states of the children
             h_sum = []
             c_remains = []
-            x0 = torch.zeros(len(nodes_at_height), len(self.vocab),
+            x0 = torch.zeros(len(nodes_at_height), self.overall_vocab_size,
                              device=self.opts.device) \
                       .scatter_(1, torch.tensor([self.get_vocab_idx(node, localnodes, paths, cnames) for node in nodes_at_height],
                                                 device=self.opts.device).unsqueeze(1), 1.0)
