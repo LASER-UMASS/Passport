@@ -231,7 +231,7 @@ class TermEncoder(nn.Module):
                     self.common_paths.index(data)
             else:
                 return 0 # This is the "unknown path" index
-        elif node not in localnodes + cnames + paths and data in self.defs_vocab.index(data):
+        elif node not in list(localnodes) + list(cnames) + list(paths) and data in self.defs_vocab:
             return num_unks + len(self.locals_vocab) + len(self.constructors_vocab) + \
               len(self.common_paths) + self.defs_vocab.index(data)
         elif self.opts.merge_unknowns:
