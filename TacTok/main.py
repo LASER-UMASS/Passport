@@ -24,7 +24,7 @@ def main():
       get_vocabs(opts)
 
     # create the model
-    model = Prover(opts, defs_vocabs, locals_vocab, constrs_vocab, paths_vocab)
+    model = Prover(opts, defs_vocab, locals_vocab, constrs_vocab, paths_vocab)
     model.to(opts.device)
 
     # crete the optimizer
