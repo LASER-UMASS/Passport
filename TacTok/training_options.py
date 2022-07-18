@@ -60,30 +60,6 @@ def parse_args():
     if opts.include_synthetic:
         opts.datapath = opts.datapath.replace('/human', '/*')
 
-    # The identifier vocabulary
-    vocab = []
-    if opts.include_defs:
-        vocab += list(pickle.load(open(opts.def_vocab_file, 'rb')).keys())
-    vocab += ['<unk-ident>']
-
-    # The local variable vocabulary
-    if opts.include_locals:
-        vocab += list(pickle.load(open(opts.local_vocab_file, 'rb')).keys())
-        if not opts.merge_vocab:
-            vocab += ['<unk-local>']
-
-    # The path vocabulary
-    if opts.include_paths:
-        vocab += list(pickle.load(open(opts.path_vocab_file, 'rb')).keys())
-        if not opts.merge_vocab:
-            vocab += ['<unk-path>']
-
-    if opts.include_constructor_names:
-        vocab += list(pickle.load(open(opts.constructor_vocab_file, 'rb')).keys())
-        vocab += ['<unk-constructor>']
-
-    opts.vocab = vocab
-
     if opts.exp_id is None:
         opts.exp_id = str(datetime.now())[:-7].replace(' ', '-')
     opts.log_dir = os.path.join('./runs', opts.exp_id)
