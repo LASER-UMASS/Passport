@@ -174,10 +174,10 @@ class TermEncoder(nn.Module):
                                                  nonlinear=torch.tanh)
         # By default, load the vocabulary passed in --globals-file; this defaults to the
         # globals vocabulary but can be set to any other by command line.
-        occurances = pickle.load(open(opts.globals_file, 'rb'))
-
+        if opts.subwords_from_globals or not opts.merge_known_vocabs:
+            occurances = pickle.load(open(opts.globals_file, 'rb'))
         # Non-default vocabularies
-        if opts.merge_known_vocabs:
+        elif opts.merge_known_vocabs:
             # If passed --merge_vocab, use the merged vocabulary instead
             occurances = pickle.load(open(opts.merged_file, 'rb'))
         elif opts.use_locals_file:
