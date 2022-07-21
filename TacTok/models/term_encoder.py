@@ -156,7 +156,7 @@ class TermEncoder(nn.Module):
         if opts.merge_known_vocabs:
             self.merged_vocab = list(set(locals_vocab + defs_vocab + constructors_vocab))
             self.overall_vocab_size = len(self.merged_vocab) + len(common_paths) + \
-              len(nonterminals) + nun_unks
+              len(nonterminals) + num_unks
         else:
             self.merged_vocab = []
             self.overall_vocab_size = len(locals_vocab) + len(defs_vocab) + \
