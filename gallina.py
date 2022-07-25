@@ -72,12 +72,19 @@ class GallinaTermParser:
             node.height = 0
             keep_constructor_desc = is_constructor_desc and syn_conf.include_constructor_names
             for c in node.children:
-                if isinstance(c, Tree):
+                if syn_conf.strip_ident_trees and SyntaxConfig.is_constructor(node):
+                    constructor_name = self.serapi.get_constr_name(node)
+                    if constructor_name:
+                        ident_wrapper = SyntaxConfig.singleton_ident(constructor_name)
+                        node.height = 2
+                        children.append(ident_wrapper)
+                elif isinstance(c, Tree):
                     node.height = max(node.height, c.height + 1)
                     children.append(c)
                 # Don't erase fully-qualified definition & theorem names
                 elif (((syn_conf.include_defs or keep_constructor_desc) and SyntaxConfig.is_label(node)) or
-                ((syn_conf.include_paths or keep_constructor_desc) and SyntaxConfig.is_path(node))):
+                ((syn_conf.include_paths or keep_constructor_desc) and SyntaxConfig.is_path(node)) or
+                 (syn_conf.strip_ident_trees and SyntaxConfig.is_local(node))):
                     ident_wrapper = SyntaxConfig.singleton_ident(c.value)
                     node.height = 2
                     children.append(ident_wrapper)
@@ -90,7 +97,7 @@ class GallinaTermParser:
                     children.append(c)
 
              # Recover constructor names
-            if syn_conf.include_constructor_names and SyntaxConfig.is_constructor(node):
+            if syn_conf.include_constructor_names and SyntaxConfig.is_constructor(node) and not syn_conf.strip_ident_trees:
                 constructor_name = self.serapi.get_constr_name(node)
                 if not syn_conf.include_paths:
                     for path_node in node.find_data('constructor_dirpath'):
@@ -100,7 +107,7 @@ class GallinaTermParser:
                     def_node.children = []
                 if constructor_name:
                     children.append(SyntaxConfig.singleton_ident(constructor_name))
-            if SyntaxConfig.is_constructor(node):
+            if SyntaxConfig.is_constructor(node) and not syn_conf.strip_ident_trees:
                 for parent in node.iter_subtrees():
                     parent.children = [c for c in parent.children if not isinstance(c, Token)]
 

@@ -49,7 +49,7 @@ def main():
         start_epoch = checkpoint['n_epoch'] + 1
         model.to(opts.device)
 
-    agent = Agent(model, optimizer, dataloader, opts)
+    agent = Agent(model, optimizer, dataloader, opts, strip_ident_trees=False)
 
     best_acc = -1.
     for n_epoch in range(start_epoch, start_epoch + opts.num_epochs):

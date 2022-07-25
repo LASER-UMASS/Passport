@@ -5,11 +5,12 @@ from lark.tree import Tree
 class SyntaxConfig:
 
     def __init__(self, include_locals=True, include_defs=True, include_paths=True,
-                 include_constructor_names=True):
+                 include_constructor_names=True, strip_ident_trees=False):
         self.include_locals = include_locals
         self.include_defs = include_defs
         self.include_paths = include_paths
         self.include_constructor_names = include_constructor_names
+        self.strip_ident_trees = strip_ident_trees
 
     # The node is an identifier
     @staticmethod

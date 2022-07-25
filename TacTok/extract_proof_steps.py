@@ -142,6 +142,7 @@ if __name__ == '__main__':
     arg_parser.add_argument('--no_constructors', action='store_false', dest='include_constructor_names',
                         help='do not include constructor names in the model')
     arg_parser.add_argument('--no_paths', action='store_false', dest='include_paths', help='do not include the paths of definitions and theorems in the model')
+    arg_parser.add_argument('--strip_ident_trees', action='store_true')
     arg_parser.add_argument('--data_root', type=str, default='../data',
                                 help='The folder for CoqGym')
     arg_parser.add_argument('--file', type=str, default=None,
@@ -154,7 +155,7 @@ if __name__ == '__main__':
     args = arg_parser.parse_args()
     print(args)
     
-    syn_conf = SyntaxConfig(args.include_locals, args.include_defs, args.include_paths, args.include_constructor_names)
+    syn_conf = SyntaxConfig(args.include_locals, args.include_defs, args.include_paths, args.include_constructor_names, args.strip_ident_trees)
     term_parser = GallinaTermParser(args.coq_projects, syn_conf, caching=True, use_serapi=True)
 
     if args.file:

@@ -43,6 +43,7 @@ if __name__ == '__main__':
     parser.add_argument('--num_tactic_candidates', type=int, default=20)
     parser.add_argument('--lens_norm', type=float, default=0.5, help='lengths normalization')
     parser.add_argument('--seed', type=int, default=0)
+    parser.add_argument('--strip_ident_trees', action='store_true')
 
     opts = parser.parse_args()
 
@@ -75,7 +76,7 @@ if __name__ == '__main__':
     else:
         model = None
 
-    agent = Agent(model, None, None, opts)
+    agent = Agent(model, None, None, opts, opts.strip_ident_trees)
 
     if opts.file:
         files = [opts.file]
