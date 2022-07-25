@@ -234,6 +234,9 @@ class TermEncoder(nn.Module):
         elif node not in list(localnodes) + list(cnames) + list(paths) and data in self.defs_vocab:
             return num_unks + len(self.locals_vocab) + len(self.constructors_vocab) + \
               len(self.common_paths) + self.defs_vocab.index(data)
+        elif data in nonterminals:
+            return num_unks + len(self.locals_vocab) + len(self.constructors_vocab) + \
+              len(self.common_paths) + len(self.defs_vocab) + nonterminals.index(data)
         elif self.opts.merge_unknowns:
             return 1 # This is the "unknown ident" index, when unknowns are merged (not paths)
         else:
