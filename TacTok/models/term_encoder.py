@@ -138,7 +138,7 @@ class TermEncoder(nn.Module):
         self.opts = opts
         self.syn_conf = SyntaxConfig(opts.include_locals, opts.include_defs, opts.include_paths,
                                      opts.include_constructor_names)
-        if opts.merge_known_vocabs:
+        if opts.merge_known_vocabs or opts.no_indexing:
             self.locals_vocab = []
             self.defs_vocab = []
             self.constructors_vocab = []
@@ -149,7 +149,9 @@ class TermEncoder(nn.Module):
 
         self.common_paths = common_paths
 
-        if opts.merge_unknowns:
+        if opts.no_indexing:
+            num_unks = 2
+        elif opts.merge_unknowns:
             num_unks = 2
         else:
             num_unks = 4
@@ -157,6 +159,9 @@ class TermEncoder(nn.Module):
             self.merged_vocab = list(set(locals_vocab + defs_vocab + constructors_vocab))
             self.overall_vocab_size = len(self.merged_vocab) + len(common_paths) + \
               len(nonterminals) + num_unks
+        elif opts.no_indexing:
+            self.merged_vocab = []
+            self.overall_vocab_size = num_unks + len(nonterminals) + len(common_paths)
         else:
             self.merged_vocab = []
             self.overall_vocab_size = len(locals_vocab) + len(defs_vocab) + \
@@ -213,13 +218,25 @@ class TermEncoder(nn.Module):
 
     def get_vocab_idx(self, node, localnodes, paths, cnames):
         data = node.data
-        if self.opts.merge_unknowns:
+        if self.opts.no_indexing:
+            num_unks = 2
+        elif self.opts.merge_unknowns:
             num_unks = 2 # If we merge unknowns, then there is a path unknown,
                          # and an everthing else unknown
         else:
             num_unks = 4 # Otherewise, there's a path unknown, a local unknown,
                          # a constructor unknown, and a global unknown
-        if self.opts.merge_known_vocabs and data in self.merged_vocab:
+        if self.opts.no_indexing:
+            if node in paths:
+                if data in self.common_paths:
+                    return num_unks + self.common_paths.index(data)
+                else:
+                    return 0
+            elif data in nonterminals:
+                return num_unks + len(self.common_paths) + nonterminals.index(data)
+            else:
+                return 1
+        elif self.opts.merge_known_vocabs and data in self.merged_vocab:
             return num_unks + self.merged_vocab.index(data)
         elif node in localnodes and data in self.locals_vocab:
             return num_unks + self.locals_vocab.index(data)
