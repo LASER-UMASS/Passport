@@ -67,3 +67,7 @@ Model checkpoints will be saved in `Passport/runs/tok/checkpoints/`. See `option
 
 Now, you can evaluate a model you trained on the test set. For example, the Tok model that you trained can be run with `python evaluate.py ours tok-results --path /path/to/tok_model/*.pth --no-locals-file`.
 If you used additional options in training, specify those same options for evaluating.
+
+## 6. Pre-trained models from paper
+
+Some pre-trained models from the paper (Tok+Passport, Tac+Passport, ASTactic+Passport) are available [here](https://drive.google.com/file/d/1SAIk0EgRHuLoO5SsrToUgLjnJ5WBc2J7/view?usp=sharing). Once you download and unzip, the model weights are found in the `checkpoints/` dir of each model variant's directory. We recommend using `model_002.pth`. 
