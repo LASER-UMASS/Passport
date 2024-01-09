@@ -47,13 +47,12 @@ This generates a `*.json` file in `./data/` corresponding to each `*.meta` file.
 
 ### Download the CoqGym dataset
 
-1. Download the CoqGym dataset (you do not need to extract proofs from Coq projects)
-[here](https://drive.google.com/drive/folders/149m_17VkYYkl0kdSB4AI8zodCuTmPaA6?usp=sharing)
-2. Unzip the data and set the paths: `python unzip_data.py`
+To download the CoqGym dataset, please refer to the [CoqGym](https://github.com/princeton-vl/CoqGym) repo for the latest instructions.
 
 ### Training Examples (proof steps)
 
-1. Proofs steps used in the paper are found in `processed.tar.gz`, which can be downloaded from the replication package link provided above. This should be copied into `Passport/`
+Proofs steps used in the paper are found in `processed.tar.gz`, which can be downloaded from a shared Google drive link [here](https://drive.google.com/file/d/1EJlGTkYhQwzz-pnCpKHoWMJrLebupchf/view?usp=sharing). This should be copied into `Passport/`. When you uncompress it,
+you will see the directory `proof_steps/`. 
 2. To extract new proofs, run `python extract_proof_steps.py`.
 
 ## 4. Training Passport
